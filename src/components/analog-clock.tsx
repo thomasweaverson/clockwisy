@@ -53,8 +53,8 @@ export default function AnalogClock({
   const dialTicks = useMemo(() => Array.from({ length: 12 }, (_, i) => (i + 1) * 30), []);
 
   const handHoverStyles = isPm
-    ? "group-hover:stroke-amber-500 group-hover:drop-shadow-[0_0_8px_rgba(251,191,36,0.7)]"
-    : "group-hover:stroke-indigo-600 group-hover:drop-shadow-[0_0_8px_rgba(79,70,229,0.4)]";
+    ? "media-[hover:hover]:group-hover:stroke-amber-500 media-[hover:hover]:group-hover:drop-shadow-[0_0_8px_rgba(251,191,36,0.7)]"
+    : "media-[hover:hover]:group-hover:stroke-indigo-600 media-[hover:hover]:group-hover:drop-shadow-[0_0_8px_rgba(79,70,229,0.4)]";
 
   return (
     <div className="relative flex items-center justify-center p-2 select-none">
