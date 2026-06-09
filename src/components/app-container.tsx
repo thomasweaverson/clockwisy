@@ -7,7 +7,7 @@ export default function AppContainer({ children }: React.PropsWithChildren) {
   return (
     <div
       className={`
-        flex min-h-dvh flex-col items-center justify-center p-2 gap-3
+        flex min-h-dvh flex-col items-center justify-center p-3 gap-3
         ${appBackground} ${appText}
       `}
     >
