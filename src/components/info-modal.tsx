@@ -47,7 +47,7 @@ export default function InfoModal({ isOpen, onClose }: InfoModalProps) {
         <h2 className="text-xl font-bold tracking-tight pr-8">ClockWisy Guide</h2>
 
         <div className={`space-y-3 text-sm font-sans ${appText}`}>
-          <ul className="pl-5 space-y-1.5 list-disc">
+          <ul className="pl-5 space-y-1.5">
             <li>
               <strong className={textActive}>Drag Hands:</strong> Click and drag the clock hands directly to set custom hours or minutes manually
             </li>
