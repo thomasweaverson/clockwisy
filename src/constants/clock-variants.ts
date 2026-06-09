@@ -7,7 +7,7 @@ type ClockNumber = {
 
 export type ClockVariantConfig = {
   id: ClockStyle;
-  name: string;
+  title: string;
   showTicks: boolean;
   textSize: string;
   radius: number;
@@ -22,7 +22,7 @@ const ROMAN_LABELS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X
 export const CLOCK_VARIANTS: Record<ClockStyle, ClockVariantConfig> = {
   minimal: {
     id: "minimal",
-    name: "|",
+    title: "|",
     showTicks: true,
     textSize: "text-sm",
     radius: 110,
@@ -30,7 +30,7 @@ export const CLOCK_VARIANTS: Record<ClockStyle, ClockVariantConfig> = {
   },
   arabic: {
     id: "arabic",
-    name: "12",
+    title: "12",
     showTicks: false,
     textSize: "text-2xl font-black",
     radius: 120,
@@ -41,7 +41,7 @@ export const CLOCK_VARIANTS: Record<ClockStyle, ClockVariantConfig> = {
   },
   roman: {
     id: "roman",
-    name: "XII",
+    title: "XII",
     showTicks: false,
     textSize: "text-2xl font-medium tracking-tight",
     radius: 120,

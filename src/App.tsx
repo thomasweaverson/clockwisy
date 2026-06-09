@@ -8,13 +8,12 @@ import AnalogClock from "./components/analog-clock";
 import AppContainer from "./components/app-container";
 import AppFooter from "./components/app-footer";
 import AppHeader from "./components/app-header";
-import ClockFaceSelector from "./components/clock-face-selector";
 import ControlPanel from "./components/control-panel";
 import TimeInput from "./components/time-input";
 
 export default function App() {
   const { time, isSynchronized, updateTime, toggleSynchronization } = useClockSync();
-  const [clockStyle, setClockStyle] = useState<ClockStyle>("minimal");
+  const [clockStyle, setClockStyle] = useState<ClockStyle>("roman");
 
   const isPm = time.hours >= 12;
 
@@ -30,12 +29,14 @@ export default function App() {
               isSynchronized={isSynchronized}
               onChangeTime={updateTime}
               onToggleSynchronized={toggleSynchronization}
-            />
-
-            <ClockFaceSelector
               currentStyle={clockStyle}
               onStyleChange={setClockStyle}
             />
+
+            {/* <ClockFaceSelector
+              currentStyle={clockStyle}
+              onStyleChange={setClockStyle}
+            /> */}
 
             <AnalogClock
               hours={time.hours}
