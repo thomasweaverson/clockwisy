@@ -6,6 +6,9 @@ The project was born from a joke that Gen Z can't tell time using an analog cloc
 Well, I had to figure out how it works myself. Along the way, I got some practice with React design.
 
 ---
+Project Link: [clockwisy.vercel.app](https://clockwisy.vercel.app/)
+
+---
 
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white&style=flat-square)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-6.x-3178C6?logo=typescript&logoColor=white&style=flat-square)](https://www.typescriptlang.org/)
@@ -96,5 +99,3 @@ Distributed under the MIT License. See LICENSE for more information.
 
 👨‍💻 Author
 Created by @thomasweaverson
-
-Project Link: [clockwisy.vercel.app](https://clockwisy.vercel.app/)
