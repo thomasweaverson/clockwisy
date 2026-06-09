@@ -1,4 +1,4 @@
-# 🕒 ClockWise
+# 🕒 ClockWisy
 
 This is a simple training project for my portfolio
 
@@ -41,24 +41,25 @@ Make sure you have [Node.js](https://nodejs.org/) installed (v18 or higher recom
 ### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone [https://github.com/thomasweaverson/clockwise.git](https://github.com/thomasweaverson/clockwise.git)
+```bash
+git clone https://github.com/thomasweaverson/clockwisy.git
+```
 
 Navigate into the project directory:
 
-```
-cd clockwise
+```bash
+cd clockwisy
 ```
 
 Install dependencies:
-```
+```bash
 npm install
 ```
 
 Development Server
 Run the local dev server with hot module replacement (HMR):
 
-```
+```bash
 npm run dev
 ```
 
@@ -67,14 +68,13 @@ Open http://localhost:5173 in your browser to view the application.
 Production Build
 Compile and optimize the application for production:
 
-```
+```bash
 npm run build
 ```
 
 The production-ready assets will be generated in the dist/ directory, ready to be deployed to Vercel, Netlify, or GitHub Pages.
 
-📂 Project Structure Sketch
-Plaintext
+```text
 src/
 ├── components/          # Reusable UI Atoms & Structural Layout blocks
 │   ├── analog-clock.tsx # SVG Core, drag handles & pointer tracking
@@ -86,6 +86,7 @@ src/
 ├── constants/           # Core constants (Clock variants, style presets)
 ├── App.tsx              # Main entry layout assembler
 └── main.tsx             # DOM Root mounter
+```
 
 🤝 Contributing - welcome
 
@@ -96,4 +97,4 @@ Distributed under the MIT License. See LICENSE for more information.
 👨‍💻 Author
 Created by @thomasweaverson
 
-Project Link: https://github.com/thomasweaverson/clockwise
+Project Link: [clockwisy.vercel.app](https://clockwisy.vercel.app/)

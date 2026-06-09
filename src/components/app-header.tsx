@@ -12,7 +12,7 @@ export default function AppHeader() {
           ${headerGradient}
         `}
       >
-        ClockWise
+        ClockWisy
       </h1>
 
       <p

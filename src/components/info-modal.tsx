@@ -44,7 +44,7 @@ export default function InfoModal({ isOpen, onClose }: InfoModalProps) {
         </button>
 
         {/* Контентная часть */}
-        <h2 className="text-xl font-bold tracking-tight pr-8">ClockWise Guide</h2>
+        <h2 className="text-xl font-bold tracking-tight pr-8">ClockWisy Guide</h2>
 
         <div className={`space-y-3 text-sm font-sans ${appText}`}>
           <ul className="pl-5 space-y-1.5 list-disc">

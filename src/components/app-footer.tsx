@@ -15,7 +15,7 @@ export default function AppFooter() {
       `.trim()}
     >
       <a
-        href="https://github.com/thomasweaverson/clockwise"
+        href="https://github.com/thomasweaverson/clockwisy"
         target="_blank"
         rel="noopener noreferrer"
         className={`
@@ -44,7 +44,7 @@ export default function AppFooter() {
       </a>
 
       <div className="opacity-60 flex flex-col gap-0.5">
-        <p>© {currentYear} ClockWise. Built with Vite + React + TS</p>
+        <p>© {currentYear} ClockWisy. Built with Vite + React + TS</p>
       </div>
     </footer>
   );

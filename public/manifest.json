@@ -1,6 +1,6 @@
 {
-  "name": "ClockWise — Exploring the Clock Face",
-  "short_name": "ClockWise",
+  "name": "ClockWisy — Exploring the Clock Face",
+  "short_name": "ClockWisy",
   "description": "Here you can study analog clocks and learn how to tell time using them.",
   "start_url": "/",
   "display": "standalone",

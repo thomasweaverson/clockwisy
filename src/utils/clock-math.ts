@@ -8,7 +8,7 @@ const DEGREES_PER_MINUTE = DEGREES_IN_CIRCLE / MINUTES_IN_HOUR; // 6°
 const DEGREES_PER_HOUR = DEGREES_IN_CIRCLE / HOURS_ON_DIAL;    // 30°
 
 // Trigonometric shift correction:
-// Math.atan2 considers 0° at "3 o'clock" (east) counterclockwise.
+// Math.atan2 considers 0° at "3 o'clock" (east) counter clockwise.
 // We need to shift to "12 o'clock" (north) and rotate clockwise.
 const TRIG_ANGLE_OFFSET = 90;
 
