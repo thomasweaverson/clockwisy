@@ -9,7 +9,7 @@ export default function AppFooter() {
   return (
     <footer
       className={`
-        mt-auto flex flex-col items-center gap-2 pt-8 pb-4
+        mt-auto flex flex-col items-center py-2
         text-center text-xs font-medium tracking-wide select-none
         transition-colors duration-700 ${textNeutral}
       `.trim()}

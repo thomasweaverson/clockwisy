@@ -22,7 +22,7 @@ export default function App() {
       <AppContainer>
           <AppHeader />
 
-          <main className="flex w-full max-w-sm flex-col items-center gap-6">
+          <main className="flex w-full max-w-sm flex-col items-center gap-3">
             <ControlPanel
               hours={time.hours}
               minutes={time.minutes}
@@ -32,11 +32,6 @@ export default function App() {
               currentStyle={clockStyle}
               onStyleChange={setClockStyle}
             />
-
-            {/* <ClockFaceSelector
-              currentStyle={clockStyle}
-              onStyleChange={setClockStyle}
-            /> */}
 
             <AnalogClock
               hours={time.hours}
