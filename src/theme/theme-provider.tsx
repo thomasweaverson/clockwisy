@@ -1,4 +1,3 @@
-// providers/ThemeProvider.tsx
 import React, { useMemo } from "react";
 
 import { ThemeContext } from "./types";

@@ -13,12 +13,10 @@ export function useModalLogic({ isOpen, onClose }: UseModalLogicProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
-  // Синхронизация рендеринга на этапе вызова функции
   if (isOpen && !shouldRender) {
     setShouldRender(true);
   }
 
-  // 1. Управление жизненным циклом DOM и скроллом страницы
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -34,7 +32,6 @@ export function useModalLogic({ isOpen, onClose }: UseModalLogicProps) {
     };
   }, [isOpen]);
 
-  // 2. Менеджмент фокуса (Автофокус + Возврат)
   useEffect(() => {
     if (isOpen) {
       previousFocusRef.current = document.activeElement as HTMLElement;
@@ -45,7 +42,6 @@ export function useModalLogic({ isOpen, onClose }: UseModalLogicProps) {
     }
   }, [isOpen]);
 
-  // 3. Обработка клавиш (Esc + Focus Trap)
   useEffect(() => {
     if (!isOpen) { return; }
 
