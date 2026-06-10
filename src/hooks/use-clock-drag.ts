@@ -1,4 +1,4 @@
-import { useState, useRef, type RefObject } from "react";
+import { useRef, useState, type RefObject } from "react";
 import { clockAudio } from "../utils/clock-audio";
 import {
   calculate24Hour,
@@ -34,11 +34,15 @@ export const useClockDrag = ({
 
   const wasDraggingRef = useRef(false);
 
+  const isAnimatingRef = useRef(false);
+
   const isPm = hours >= 12;
   const minuteDeg = minutesToDegrees(minutes);
   const hourDeg = localHourDeg !== null ? localHourDeg : hoursToDegrees(hours, minutes, true);
 
   const animateHourHandTo = (targetDeg: number, currentDeg: number, onComplete?: () => void) => {
+    isAnimatingRef.current = true;
+
     let diff = targetDeg - currentDeg;
     if (diff > 180) { diff -= 360; }
     if (diff < -180) { diff += 360; }
@@ -58,8 +62,14 @@ export const useClockDrag = ({
         requestAnimationFrame(step);
       } else {
         clockAudio.playClick();
-        if (onComplete) { onComplete(); }
+
+        if (onComplete) {
+          onComplete();
+        }
+
         setLocalHourDeg(null);
+
+        isAnimatingRef.current = false;
       }
     };
 
@@ -83,6 +93,9 @@ export const useClockDrag = ({
 
   const handleSvgClick = (e: React.MouseEvent<SVGSVGElement>) => {
     if (wasDraggingRef.current) { return; }
+
+    if (isAnimatingRef.current) { return; }
+
     if (activeHand || isHoveringHand || !svgRef.current) { return; }
 
     const rect = svgRef.current.getBoundingClientRect();
