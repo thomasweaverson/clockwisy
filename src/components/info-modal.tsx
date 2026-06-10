@@ -35,7 +35,6 @@ export default function InfoModal({ isOpen, onClose }: InfoModalProps) {
     <div className={overlayClasses} onClick={handleCloseWithSound}>
       <div ref={modalRef} className={cardClasses} onClick={(e) => e.stopPropagation()}>
 
-        {/* Кнопка закрытия */}
         <button ref={closeButtonRef} type="button" onClick={handleCloseWithSound} className={closeButtonClasses} aria-label="Close help">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
             <line x1="18" y1="6" x2="6" y2="18" />
@@ -43,7 +42,6 @@ export default function InfoModal({ isOpen, onClose }: InfoModalProps) {
           </svg>
         </button>
 
-        {/* Контентная часть */}
         <h2 className="text-xl font-bold tracking-tight pr-8">ClockWisy Guide</h2>
 
         <div className={`space-y-3 text-sm font-sans ${appText}`}>

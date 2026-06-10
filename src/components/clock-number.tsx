@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { ClockVariantConfig } from "../constants/clock-variants";
 
 type ClockNumberProps = {
@@ -8,7 +9,7 @@ type ClockNumberProps = {
   variant: ClockVariantConfig;
 };
 
-export default function ClockNumber({ num, numHour, hoveredHour, isPm, variant }: ClockNumberProps) {
+function ClockNumberComponent({ num, numHour, hoveredHour, isPm, variant }: ClockNumberProps) {
   const isHovered = hoveredHour === numHour;
 
   return (
@@ -32,3 +33,7 @@ export default function ClockNumber({ num, numHour, hoveredHour, isPm, variant }
     </g>
   );
 };
+
+const ClockNumber = memo(ClockNumberComponent);
+
+export default ClockNumber;

@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { useTheme } from "../theme/use-theme";
 
 type ClockTickProps = {
@@ -6,7 +7,7 @@ type ClockTickProps = {
   hoveredHour: number | null;
 };
 
-export default function ClockTick({ angle, tickHour, hoveredHour }: ClockTickProps) {
+function ClockTickComponent({ angle, tickHour, hoveredHour }: ClockTickProps) {
   const isMainTick = tickHour % 3 === 0;
   const isHovered = hoveredHour === tickHour;
 
@@ -30,3 +31,7 @@ export default function ClockTick({ angle, tickHour, hoveredHour }: ClockTickPro
     />
   );
 };
+
+const ClockTick = memo(ClockTickComponent);
+
+export default ClockTick;

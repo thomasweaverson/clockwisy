@@ -32,7 +32,6 @@ export const useClockDrag = ({
   const [activeHand, setActiveHand] = useState<ActiveHand>(null);
   const [localHourDeg, setLocalHourDeg] = useState<number | null>(null);
 
-  // Флаг для определения, было ли движение (чтобы предотвратить ложный клик после драга)
   const wasDraggingRef = useRef(false);
 
   const isPm = hours >= 12;
@@ -68,7 +67,6 @@ export const useClockDrag = ({
   };
 
   const handleSvgMouseMove = (e: React.PointerEvent<SVGSVGElement>) => {
-    // На мобильных устройствах (touch) ховер-эффекты циферблата не нужны
     if (e.pointerType === "touch") {
       setHoveredHour(null);
       return;
@@ -84,12 +82,10 @@ export const useClockDrag = ({
   };
 
   const handleSvgClick = (e: React.MouseEvent<SVGSVGElement>) => {
-    // Если пользователь только что отпустил палец после перетаскивания стрелки — игнорируем клик
     if (wasDraggingRef.current) { return; }
     if (activeHand || isHoveringHand || !svgRef.current) { return; }
 
     const rect = svgRef.current.getBoundingClientRect();
-    // Извлекаем координаты прямо из переданного события, а не из window.event
     const currentAngle = getAngleFromCoordinates(e.clientX, e.clientY, rect);
     const clickedHour = degreesToHoveredHour(currentAngle);
 
@@ -110,14 +106,13 @@ export const useClockDrag = ({
     e.currentTarget.setPointerCapture(e.pointerId);
     setActiveHand(hand);
     setHoveredHour(null);
-    wasDraggingRef.current = false; // Сбрасываем флаг при начале нового касания
+    wasDraggingRef.current = false;
     if (hand === "hour") { setLocalHourDeg(hoursToDegrees(hours, minutes, true)); }
   };
 
   const handlePointerMove = (e: React.PointerEvent<SVGElement>) => {
     if (!activeHand || !svgRef.current) { return; }
 
-    // Если палец/курсор сдвинулся, фиксируем, что происходит процесс перетаскивания (драг)
     wasDraggingRef.current = true;
 
     const rect = svgRef.current.getBoundingClientRect();
@@ -169,7 +164,6 @@ export const useClockDrag = ({
 
     setActiveHand(null);
 
-    // Сбрасываем флаг с минимальной задержкой, чтобы последующее событие onClick успело его считать и заблокироваться
     setTimeout(() => {
       wasDraggingRef.current = false;
     }, 50);
