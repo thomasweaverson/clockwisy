@@ -1,7 +1,8 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { clockAudio } from "../../utils/clock-audio";
 import type { Hours, Minutes } from "../../utils/clock-math";
 import WheelColumn from "./wheel-column";
+import { useTheme } from "../../theme/use-theme";
 
 type WheelType = "hours" | "minutes";
 
@@ -11,17 +12,6 @@ interface MobileTimePickerProps {
   isWorking: boolean;
   onChangeTime: (hours: Hours, minutes: Minutes) => void;
 }
-
-// --- Tailwind Class Styles to keep JSX clean and scannable ---
-const CONTAINER_CLASSES = `
-  flex items-center justify-center gap-4 rounded-3xl border p-4 backdrop-blur-md
-  border-slate-200/60 bg-white/60 shadow-xl shadow-slate-200/40
-  dark:border-slate-700/40 dark:bg-slate-900/40 dark:shadow-none
-`.trim();
-
-const COLON_CLASSES = `
-  pb-1 text-4xl font-bold text-slate-400 dark:text-slate-600 select-none
-`.trim();
 
 /**
  * Pure helper function to wrap hours correctly around the 24-hour cycle
@@ -39,6 +29,21 @@ export default function MobileTimePicker({
   // Shared ref state to bypass stale closures during high-velocity physics animations
   const stateRef = useRef({ hours, minutes });
   const activeWheelRef = useRef<WheelType | null>(null);
+
+  const { themeClasses } = useTheme();
+
+  const { containerBackground, containerBorder, textNeutral } = themeClasses;
+
+  // --- Tailwind Class Styles to keep JSX clean and scannable ---
+  const CONTAINER_CLASSES = `
+    flex items-center justify-center gap-4 rounded-2xl border p-4 backdrop-blur-md
+    ${containerBackground} ${containerBorder}
+
+  `.trim();
+
+  const COLON_CLASSES = `
+    pb-1 text-4xl font-bold  select-none ${textNeutral}
+  `.trim();
 
   // Keep mutational refs perfectly synced with incoming synchronized system time
   useEffect(() => {

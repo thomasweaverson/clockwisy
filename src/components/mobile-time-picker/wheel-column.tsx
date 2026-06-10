@@ -1,5 +1,6 @@
 
 import { useWheelPhysics } from "../../hooks/use-wheel-physics";
+import { useTheme } from "../../theme/use-theme";
 import { ITEM_HEIGHT, VISIBLE_ITEMS, WHEEL_HEIGHT } from "./constants";
 import WheelItem from "./wheel-item";
 
@@ -12,10 +13,11 @@ interface WheelColumnProps {
   onStopAnimating: () => void;
 }
 
-const CONTAINER_WIDTH_PX = "110px";
+const CONTAINER_WIDTH_PX = "100px";
 
 export default function WheelColumn(props: WheelColumnProps) {
   const { max } = props;
+  const { isPm } = useTheme();
 
   // Extract all complex physics calculations and event tracking into a custom hook
   const { renderValue, visualOffset, isSnapping, pointerHandlers } = useWheelPhysics(props);
@@ -38,12 +40,39 @@ export default function WheelColumn(props: WheelColumnProps) {
         width: CONTAINER_WIDTH_PX,
       }}
     >
-      {/* Upper & Lower Ambient Lighting Mask overlays */}
-      <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-white via-transparent to-white dark:from-slate-950 dark:via-transparent dark:to-slate-950" />
+
+<div
+  className="pointer-events-none absolute inset-0 z-10"
+  style={{
+    background: isPm
+      ? `
+        linear-gradient(
+          to bottom,
+          rgba(15,23,42,0.38) 0%,
+          rgba(15,23,42,0.14) 18%,
+          rgba(15,23,42,0.02) 35%,
+          rgba(15,23,42,0.02) 65%,
+          rgba(15,23,42,0.14) 82%,
+          rgba(15,23,42,0.38) 100%
+        )
+      `
+      : `
+        linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.55) 0%,
+          rgba(255,255,255,0.18) 18%,
+          rgba(255,255,255,0.02) 35%,
+          rgba(255,255,255,0.02) 65%,
+          rgba(255,255,255,0.18) 82%,
+          rgba(255,255,255,0.55) 100%
+        )
+      `,
+  }}
+/>
 
       {/* Target Focus Center Highlighter Row */}
       <div
-        className="absolute left-2 right-2 z-0 rounded-xl border border-amber-500/20 bg-slate-500/5 backdrop-blur-sm dark:border-amber-400/20 dark:bg-white/5"
+        className="absolute left-2 right-2 z-0 rounded-xl border border-slate-500/20 bg-slate-500/5 backdrop-blur-sm dark:border-slate-400/20 dark:bg-white/5"
         style={{
           height: `${ITEM_HEIGHT}px`,
           top: `${ITEM_HEIGHT * visibleRange}px`,

@@ -1,3 +1,4 @@
+import { useTheme } from "../../theme/use-theme";
 import { ITEM_HEIGHT, VISIBLE_ITEMS } from "./constants";
 
 interface WheelItemProps {
@@ -11,13 +12,6 @@ interface WheelItemProps {
 // Pre-calculating this once tokens are loaded avoids redundant math operations during high-frequency frame renders
 const CENTER_OFFSET = Math.floor(VISIBLE_ITEMS / 2) * ITEM_HEIGHT;
 
-// --- Performance Optimized Tailwind Styles ---
-const BASE_ITEM_CLASSES = `
-  absolute left-0 flex w-full items-center justify-center
-  font-mono text-3xl font-semibold tabular-nums select-none
-  text-slate-800 dark:text-slate-100
-`.trim();
-
 // Target only transform properties to enforce GPU acceleration and avoid layout thrashing
 const SNAP_TRANSITION_CLASSES = "transition-transform duration-200 ease-out";
 const ACTIVE_DRAG_CLASSES = "transition-none";
@@ -28,6 +22,8 @@ export default function WheelItem({
   visualOffset,
   isSnapping,
 }: WheelItemProps) {
+  const { themeClasses } = useTheme();
+  const { textNeutral } = themeClasses;
   const distance = Math.abs(offsetFromCenter);
 
   // Smooth layout scaling and alpha opacity factors based on current distance from view focal slot
@@ -36,6 +32,12 @@ export default function WheelItem({
 
   // Calculate precise absolute target pixel placement matrix inside the virtual viewport
   const targetTranslateY = CENTER_OFFSET + offsetFromCenter * ITEM_HEIGHT + visualOffset;
+
+  const BASE_ITEM_CLASSES = `
+      absolute left-0 flex w-full items-center justify-center
+      font-mono text-3xl font-semibold tabular-nums select-none
+      ${textNeutral}
+    `.trim();
 
   return (
     <div
