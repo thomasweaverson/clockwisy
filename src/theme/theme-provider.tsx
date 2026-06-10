@@ -22,7 +22,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
       containerBackground: isPm ? "bg-slate-900/50" : "bg-slate-300/40",
       containerBorder: isPm ? "border-slate-800/80" : "border-slate-400/20",
       faceBackground: isPm ? "bg-slate-800" : "bg-slate-50",
-      textNeutral: "text-slate-400",
+      textNeutral: isPm ? "text-slate-300" : "text-slate-600",
       textActive: isPm ? "text-amber-400" : "text-indigo-600",
       buttonBackground: isPm ? "bg-slate-800/80" : "bg-slate-100",
       buttonActiveBackground: isPm ? "bg-amber-500/10" : "bg-slate-100",

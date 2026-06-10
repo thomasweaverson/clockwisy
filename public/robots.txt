@@ -1,0 +1,25 @@
+# ==========================================
+# Robots.txt for ClockWisy Web Application
+# ==========================================
+
+# Global rules for all search engine crawlers
+User-agent: *
+
+# Allow crawling of the main application and all static assets
+Allow: /
+Allow: /assets/
+Allow: /favicon.svg
+Allow: /manifest.json
+
+# Disallow crawling of potential build artifacts and technical environments
+Disallow: /_next/
+Disallow: /node_modules/
+Disallow: /coverage/
+Disallow: *.log
+Disallow: *.local
+
+# Host definition (Optional, but good practice for specific domains)
+# Host: clockwisy.com
+
+# Sitemap location (Uncomment and update when you deploy to hosting)
+# Sitemap: https://your-domain.com/sitemap.xml
