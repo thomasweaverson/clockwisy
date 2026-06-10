@@ -24,7 +24,7 @@ export default function App() {
       <AppContainer>
         <AppHeader />
 
-        <main className="flex w-full max-w-sm flex-col items-center gap-3">
+        <main className="flex max-w-sm flex-col items-center gap-3">
           <ControlPanel
             hours={time.hours}
             minutes={time.minutes}
