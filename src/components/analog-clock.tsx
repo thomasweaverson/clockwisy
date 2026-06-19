@@ -5,6 +5,7 @@ import { useTheme } from "../theme/use-theme";
 import type { Hours, Minutes } from "../utils/clock-math";
 import ClockFace from "./clock-face";
 import ClockHands from "./clock-hands";
+import { CLOCK_DIAMETER } from "../constants/common";
 
 interface AnalogClockProps {
   hours: Hours;
@@ -23,7 +24,7 @@ export default function AnalogClock({
   const [hoveredHour, setHoveredHour] = useState<number | null>(null);
   const [isHoveringHand, setIsHoveringHand] = useState(false);
 
-  const { themeClasses, isPm } = useTheme();
+  const { themeClasses } = useTheme();
 
   const { faceBackground } = themeClasses;
 
@@ -53,8 +54,8 @@ export default function AnalogClock({
     <div className="relative flex items-center justify-center p-2 select-none">
       <svg
         ref={svgRef}
-        width="310"
-        height="310"
+        width={CLOCK_DIAMETER}
+        height={CLOCK_DIAMETER}
         viewBox="0 0 300 300"
         onClick={handleSvgClick}
         onPointerMove={(e) => {
@@ -72,13 +73,12 @@ export default function AnalogClock({
         `.trim()}
       >
 
-        <ClockFace currentStyle={currentStyle} hoveredHour={hoveredHour} isPm={isPm} />
+        <ClockFace currentStyle={currentStyle} hoveredHour={hoveredHour} />
 
         <ClockHands
           hourDeg={hourDeg}
           minuteDeg={minuteDeg}
           activeHand={activeHand}
-          isPm={isPm}
           setIsHoveringHand={setIsHoveringHand}
           handlePointerDown={handlePointerDown}
           handlePointerMove={handlePointerMove}
