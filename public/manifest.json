@@ -4,8 +4,8 @@
   "description": "Here you can study analog clocks and learn how to tell time using them.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#e2e8f0",
+  "theme_color": "#020618",
   "icons": [
     {
       "src": "/icon-192.png",

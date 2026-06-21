@@ -31,7 +31,7 @@ export default function ClockStyleToggler({
       onClick={toggleStyle}
       aria-label={`Change clock style. Current: ${currentStyle}`}
     >
-      <span className="text-base font-bold transition-transform duration-300 group-hover:scale-110 select-none">
+      <span className="transition-transform duration-300 group-hover:scale-110 select-none">
         {displayLabel}
       </span>
     </ControlButton>

@@ -10,12 +10,10 @@ interface MobileTimePickerProps {
   hours: Hours;
   minutes: Minutes;
   isWorking: boolean;
+  isAmPm: boolean;
   onChangeTime: (hours: Hours, minutes: Minutes) => void;
 }
 
-/**
- * Pure helper function to wrap hours correctly around the 24-hour cycle
- */
 const getWrappedHours = (currentHours: number, delta: number): Hours => {
   return (((currentHours + delta + 24) % 24) as Hours);
 };
@@ -24,33 +22,28 @@ export default function MobileTimePicker({
   hours,
   minutes,
   isWorking,
+  isAmPm,
   onChangeTime,
 }: MobileTimePickerProps) {
-  // Shared ref state to bypass stale closures during high-velocity physics animations
   const stateRef = useRef({ hours, minutes });
   const activeWheelRef = useRef<WheelType | null>(null);
 
   const { themeClasses } = useTheme();
-
   const { containerBackground, containerBorder, textNeutral } = themeClasses;
 
-  // --- Tailwind Class Styles to keep JSX clean and scannable ---
   const CONTAINER_CLASSES = `
-    flex items-center justify-center gap-4 rounded-2xl border p-4 backdrop-blur-md
+    relative flex items-center justify-center gap-6 rounded-2xl border p-4 backdrop-blur-md
     ${containerBackground} ${containerBorder}
-
   `.trim();
 
   const COLON_CLASSES = `
-    pb-1 text-4xl font-bold  select-none ${textNeutral}
+    pb-1 text-4xl font-bold select-none ${textNeutral}
   `.trim();
 
-  // Keep mutational refs perfectly synced with incoming synchronized system time
   useEffect(() => {
     stateRef.current = { hours, minutes };
   }, [hours, minutes]);
 
-  // --- Wheel Animation Lock Handlers ---
   const handleStartAnimating = useCallback((wheel: WheelType): boolean => {
     if (activeWheelRef.current === null || activeWheelRef.current === wheel) {
       activeWheelRef.current = wheel;
@@ -63,17 +56,38 @@ export default function MobileTimePicker({
     activeWheelRef.current = null;
   }, []);
 
-  // --- Wheel Value Change Handlers ---
-  const handleHoursChange = useCallback((nextHours: number) => {
-    stateRef.current.hours = nextHours as Hours;
+  const isPm = hours >= 12;
+
+  const displayHoursValue = isAmPm ? (hours % 12) : hours;
+
+  const formatAmPmHours = (val: number) => {
+    const displayHour = val === 0 ? 12 : val;
+    return displayHour.toString().padStart(2, "0");
+  };
+
+  const handleHoursChange = useCallback((nextHoursIndex: number, loopDelta: number) => {
+    if (isAmPm) {
+      let currentHours24 = stateRef.current.hours;
+
+      if (loopDelta !== 0) {
+        currentHours24 = getWrappedHours(currentHours24, loopDelta * 12);
+      }
+
+      const currentIsPm = currentHours24 >= 12;
+
+      const targetHours = currentIsPm ? (nextHoursIndex + 12) : nextHoursIndex;
+      stateRef.current.hours = targetHours as Hours;
+    } else {
+      stateRef.current.hours = nextHoursIndex as Hours;
+    }
+
     clockAudio.playHourTick();
     onChangeTime(stateRef.current.hours, stateRef.current.minutes);
-  }, [onChangeTime]);
+  }, [isAmPm, onChangeTime]);
 
   const handleMinutesChange = useCallback((nextMinutes: number, loopDelta: number) => {
     stateRef.current.minutes = nextMinutes as Minutes;
 
-    // Handle hour overflow when minutes cross the boundary via inertia or dragging
     if (loopDelta !== 0) {
       stateRef.current.hours = getWrappedHours(stateRef.current.hours, loopDelta);
       clockAudio.playHourTick();
@@ -86,12 +100,13 @@ export default function MobileTimePicker({
     <section className={CONTAINER_CLASSES}>
       {/* Hours Column */}
       <WheelColumn
-        value={hours}
-        max={24}
+        value={displayHoursValue}
+        max={isAmPm ? 12 : 24}
         inertiaCoefficient={2}
         onStartAnimating={() => handleStartAnimating("hours")}
         onStopAnimating={handleStopAnimating}
         onChange={handleHoursChange}
+        formatLabel={isAmPm ? formatAmPmHours : undefined}
       />
 
       {/* Flashing Time Divider */}
@@ -108,6 +123,18 @@ export default function MobileTimePicker({
         onStopAnimating={handleStopAnimating}
         onChange={handleMinutesChange}
       />
+
+      {isAmPm && (
+        <span
+          className={`
+            absolute top-3 left-1/2 -translate-x-1/2
+            text-xl font-bold tracking-wider select-none transition-colors duration-300
+            ${textNeutral}
+          `.trim()}
+        >
+          {isPm ? "PM" : "AM"}
+        </span>
+      )}
     </section>
   );
 }

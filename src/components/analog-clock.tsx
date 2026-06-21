@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import { type ClockStyle } from "../constants/clock-variants";
+import { BREAK_POINT, CLOCK_DIAMETER } from "../constants/common";
 import { useClockDrag } from "../hooks/use-clock-drag";
+import { useWindowWidth } from "../hooks/use-window-size";
 import { useTheme } from "../theme/use-theme";
 import type { Hours, Minutes } from "../utils/clock-math";
 import ClockFace from "./clock-face";
@@ -19,11 +21,14 @@ export default function AnalogClock({
   currentStyle,
   onChangeTime,
 }: AnalogClockProps) {
+  const viewportWidth = useWindowWidth();
+  const clockWidthCoefficient = viewportWidth > BREAK_POINT ? 1.8 : 1;
+
   const svgRef = useRef<SVGSVGElement>(null);
   const [hoveredHour, setHoveredHour] = useState<number | null>(null);
   const [isHoveringHand, setIsHoveringHand] = useState(false);
 
-  const { themeClasses, isPm } = useTheme();
+  const { themeClasses } = useTheme();
 
   const { faceBackground } = themeClasses;
 
@@ -53,8 +58,8 @@ export default function AnalogClock({
     <div className="relative flex items-center justify-center p-2 select-none">
       <svg
         ref={svgRef}
-        width="310"
-        height="310"
+        width={CLOCK_DIAMETER * clockWidthCoefficient}
+        height={CLOCK_DIAMETER * clockWidthCoefficient}
         viewBox="0 0 300 300"
         onClick={handleSvgClick}
         onPointerMove={(e) => {
@@ -72,13 +77,12 @@ export default function AnalogClock({
         `.trim()}
       >
 
-        <ClockFace currentStyle={currentStyle} hoveredHour={hoveredHour} isPm={isPm} />
+        <ClockFace currentStyle={currentStyle} hoveredHour={hoveredHour} />
 
         <ClockHands
           hourDeg={hourDeg}
           minuteDeg={minuteDeg}
           activeHand={activeHand}
-          isPm={isPm}
           setIsHoveringHand={setIsHoveringHand}
           handlePointerDown={handlePointerDown}
           handlePointerMove={handlePointerMove}

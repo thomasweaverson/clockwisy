@@ -2,16 +2,17 @@ import { memo } from "react";
 import { CLOCK_VARIANTS, type ClockStyle } from "../constants/clock-variants";
 import ClockNumber from "./clock-number";
 import ClockTick from "./clock-tick";
+import { useTheme } from "../theme/use-theme";
 
 interface ClockFaceProps {
   currentStyle: ClockStyle;
   hoveredHour: number | null;
-  isPm: boolean;
 }
 
-function ClockFaceComponent({ currentStyle, hoveredHour, isPm }: ClockFaceProps) {
+function ClockFaceComponent({ currentStyle, hoveredHour }: ClockFaceProps) {
   const clockVariant = CLOCK_VARIANTS[currentStyle];
   const dialTicks = Array.from({ length: 12 }, (_, i) => (i + 1) * 30);
+  const { isDark } = useTheme();
 
   return (
     <>
@@ -37,7 +38,7 @@ function ClockFaceComponent({ currentStyle, hoveredHour, isPm }: ClockFaceProps)
             num={num}
             numHour={index + 1}
             hoveredHour={hoveredHour}
-            isPm={isPm}
+            isDark={isDark}
             variant={clockVariant}
           />
         ))}

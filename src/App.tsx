@@ -12,27 +12,34 @@ import ControlPanel from "./components/control-panel";
 import MobileTimePicker from "./components/mobile-time-picker/mobile-time-picker";
 import TimeInput from "./components/time-input";
 import { useIsTouchDevice } from "./hooks/use-is-touch-device";
+import { useWindowWidth } from "./hooks/use-window-size";
+import type { Theme } from "./theme/types";
+import { BREAK_POINT } from "./constants/common";
 
 export default function App() {
   const { time, isSynchronized, updateTime, toggleSynchronization } = useClockSync();
   const [clockStyle, setClockStyle] = useState<ClockStyle>("roman");
+  const [isAmPm, setIsAmPm] = useState(false);
+
+  const [theme, setTheme] = useState<Theme>("light");
   const isTouchDevice = useIsTouchDevice();
-  const isPm = time.hours >= 12;
+  const viewportWidth = useWindowWidth();
+  const maxWidthClassName = viewportWidth > BREAK_POINT ? "max-w-xl" : "max-w-sm";
 
   return (
-    <ThemeProvider isPm={isPm}>
+    <ThemeProvider theme={theme}>
       <AppContainer>
         <AppHeader />
 
-        <main className="flex max-w-sm flex-col items-center gap-3">
+        <main className={`flex ${maxWidthClassName} flex-col items-center gap-1`}>
           <ControlPanel
-            hours={time.hours}
-            minutes={time.minutes}
             isSynchronized={isSynchronized}
-            onChangeTime={updateTime}
             onToggleSynchronized={toggleSynchronization}
             currentStyle={clockStyle}
             onStyleChange={setClockStyle}
+            isAmPm={isAmPm}
+            onChangeAmPm={setIsAmPm}
+            onChangeTheme={setTheme}
           />
 
           <AnalogClock
@@ -47,6 +54,7 @@ export default function App() {
               hours={time.hours}
               minutes={time.minutes}
               isWorking={isSynchronized}
+              isAmPm={isAmPm}
               onChangeTime={updateTime}
             />
           ) : (
@@ -54,6 +62,7 @@ export default function App() {
               hours={time.hours}
               minutes={time.minutes}
               isWorking={isSynchronized}
+              isAmPm={isAmPm}
               onChangeTime={updateTime}
             />
           )}

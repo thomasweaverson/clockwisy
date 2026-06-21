@@ -1,35 +1,28 @@
 import { clockAudio } from "../utils/clock-audio";
-import type { Hours, Minutes } from "../utils/clock-math";
 import ControlButton from "./control-button";
 
 interface AmPmTogglerProps {
-  hours: Hours;
-  minutes: Minutes;
-  onChangeTime: (hours: Hours, minutes: Minutes) => void;
+  isAmPm: boolean
+  onChangeAmPm: (isAmPm: boolean) => void
 }
 
 export default function AmPmToggler({
-  hours,
-  minutes,
-  onChangeTime,
+  isAmPm,
+  onChangeAmPm,
 }: AmPmTogglerProps) {
-  const isPm = hours >= 12;
-
-  const toggleDayNight = () => {
+    const toggleAmPm = () => {
     clockAudio.playClick();
-
-    const newHours = (isPm ? hours - 12 : hours + 12) as Hours;
-    onChangeTime(newHours, minutes);
+    onChangeAmPm(!isAmPm);
   };
 
   return (
     <ControlButton
-      isActive={isPm}
-      onClick={toggleDayNight}
-      aria-label={isPm ? "Switch to AM" : "Switch to PM"}
+      isActive={true}
+      onClick={toggleAmPm}
+      aria-label={isAmPm ? "Switch to 24-hour format" : "Switch to 12-hour format"}
     >
-      <span className="text-xl transition-transform duration-300 group-hover:scale-110">
-        {isPm ? "🌙" : "☀️"}
+      <span className="font-bold transition-transform duration-300 group-hover:scale-110">
+        {isAmPm ? "12H" : "24H"}
       </span>
     </ControlButton>
   );

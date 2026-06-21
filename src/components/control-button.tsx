@@ -1,5 +1,7 @@
 import { type ComponentPropsWithoutRef } from "react";
 import { useTheme } from "../theme/use-theme";
+import { useWindowWidth } from "../hooks/use-window-size";
+import { BREAK_POINT } from "../constants/common";
 
 interface ControlButtonProps extends ComponentPropsWithoutRef<"button"> {
   isActive?: boolean;
@@ -13,6 +15,9 @@ export default function ControlButton({
   ...props
 }: ControlButtonProps) {
   const { themeClasses } = useTheme();
+  const viewportWidth = useWindowWidth();
+  const buttonSizeClassNames = viewportWidth > BREAK_POINT ? "w-12 h-12" : "w-10 h-10";
+  const textSizeClassNames = viewportWidth > BREAK_POINT ? "text-lg" : "text-base";
 
   const {
     buttonActiveBackground,
@@ -23,8 +28,9 @@ export default function ControlButton({
   } = themeClasses;
 
   const baseStyles = `
+    ${textSizeClassNames} font-bold
     group flex items-center justify-center
-    w-10 h-10 rounded-xl
+    ${buttonSizeClassNames} rounded-xl
     transition-all duration-400
     cursor-pointer select-none
     active:scale-95

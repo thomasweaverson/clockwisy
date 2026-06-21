@@ -1,3 +1,5 @@
+import { BREAK_POINT } from "../constants/common";
+import { useWindowWidth } from "../hooks/use-window-size";
 import { useTheme } from "../theme/use-theme";
 
 export default function AppFooter() {
@@ -6,11 +8,14 @@ export default function AppFooter() {
 
   const currentYear = new Date().getFullYear();
 
+  const viewportWidth = useWindowWidth();
+  const textSizeClassNames = viewportWidth > BREAK_POINT ? "text-base" : "text-xs";
+
   return (
     <footer
       className={`
         mt-auto flex w-full max-w-sm items-center gap-2
-        text-center text-xs font-medium tracking-wide select-none
+        text-center ${textSizeClassNames} font-medium tracking-wide select-none
         transition-colors duration-700 ${textNeutral}
       `.trim()}
     >

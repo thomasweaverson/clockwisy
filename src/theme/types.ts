@@ -1,8 +1,10 @@
 
 import React from "react";
 
+export type Theme = "light" | "dark";
+
 export type ThemeContextType = {
-  isPm: boolean;
+  isDark: boolean;
   themeClasses: {
     appBackground: string;
     appText: string;

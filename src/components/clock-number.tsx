@@ -5,11 +5,11 @@ type ClockNumberProps = {
   num: { text: string; angle: number };
   numHour: number;
   hoveredHour: number | null;
-  isPm: boolean;
+  isDark: boolean;
   variant: ClockVariantConfig;
 };
 
-function ClockNumberComponent({ num, numHour, hoveredHour, isPm, variant }: ClockNumberProps) {
+function ClockNumberComponent({ num, numHour, hoveredHour, isDark, variant }: ClockNumberProps) {
   const isHovered = hoveredHour === numHour;
 
   return (
@@ -23,10 +23,10 @@ function ClockNumberComponent({ num, numHour, hoveredHour, isPm, variant }: Cloc
         className={`font-sans select-none transition-all duration-200 ease-in-out ${variant.textSize}`}
         fill={
           isHovered
-            ? isPm ? "#fbbf24" : "#4f46e5"
-            : isPm ? "#64748b" : "#94a3b8"
+            ? isDark ? "#fbbf24" : "#4f46e5"
+            : isDark ? "#64748b" : "#94a3b8"
         }
-        filter={isHovered ? `drop-shadow(0 0 4px ${isPm ? "rgba(251,191,36,0.6)" : "rgba(79,70,229,0.5)"})` : undefined}
+        filter={isHovered ? `drop-shadow(0 0 4px ${isDark ? "rgba(251,191,36,0.6)" : "rgba(79,70,229,0.5)"})` : undefined}
       >
         {num.text}
       </text>

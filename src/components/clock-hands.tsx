@@ -8,7 +8,6 @@ interface ClockHandsProps {
   hourDeg: number;
   minuteDeg: number;
   activeHand: ActiveHand;
-  isPm: boolean;
   setIsHoveringHand: (value: boolean) => void;
   handlePointerDown: (hand: HandType, e: React.PointerEvent<SVGElement>) => void;
   handlePointerMove: (e: React.PointerEvent<SVGSVGElement>) => void;
@@ -23,17 +22,16 @@ export default function ClockHands({
   hourDeg,
   minuteDeg,
   activeHand,
-  isPm,
   setIsHoveringHand,
   handlePointerDown,
   handlePointerMove,
   handlePointerUp,
 }: ClockHandsProps) {
-  const { themeClasses, mainColor } = useTheme();
+  const { themeClasses, mainColor, isDark } = useTheme();
   const { activeArrowColor, hourArrowColor, minuteArrowColor } = themeClasses;
 
   // Resolve active theme palette variant without dynamic template parsing execution steps
-  const handHoverStyles = isPm ? HOVER_PM_CLASSES : HOVER_AM_CLASSES;
+  const handHoverStyles = isDark ? HOVER_PM_CLASSES : HOVER_AM_CLASSES;
 
   // Package matching event delegates for downstream generic layout spreads
   const gestureDelegates = {
