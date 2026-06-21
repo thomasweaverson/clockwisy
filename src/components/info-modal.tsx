@@ -1,6 +1,7 @@
 import { createPortal } from "react-dom";
 import { useModalLogic } from "../hooks/use-modal-logic";
 import { useTheme } from "../theme/use-theme";
+import { useIsTouchDevice } from "../hooks/use-is-touch-device";
 
 interface InfoModalProps {
   isOpen: boolean;
@@ -8,6 +9,7 @@ interface InfoModalProps {
 }
 
 export default function InfoModal({ isOpen, onClose }: InfoModalProps) {
+  const isTouchDevice = useIsTouchDevice();
   const { themeClasses } = useTheme();
   const { containerBackground, containerBorder, textActive, appText, buttonFocus } = themeClasses;
 
@@ -47,13 +49,13 @@ export default function InfoModal({ isOpen, onClose }: InfoModalProps) {
         <div className={`space-y-3 text-sm font-sans ${appText}`}>
           <ul className="pl-5 space-y-1.5">
             <li>
-              <strong className={textActive}>Drag Hands:</strong> Click and drag the clock hands directly to set custom hours or minutes manually
+              <strong className={textActive}>Drag Hands:</strong> {isTouchDevice ? "Tap" : "Click"} and drag the clock hands directly to set custom hours or minutes manually
             </li>
             <li>
-              <strong className={textActive}>Digital Inputs:</strong> Change the time in the input fields and see how the time on the clock face changes
+              <strong className={textActive}>{isTouchDevice ? "Wheel" : "Digital"} Inputs:</strong> Change the time in the input fields and see how the time on the clock face changes
             </li>
             <li>
-              <strong className={textActive}>Have fun:</strong> Just try all the buttons
+              <strong className={textActive}>Have fun:</strong> Just try all the buttons in control panel
             </li>
           </ul>
         </div>
