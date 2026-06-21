@@ -17,13 +17,13 @@ class ClockAudioEngine {
   private isMuted: boolean = true;
   private isVibrationEnabled: boolean = true;
 
-  // Timestamps for tracking completion of sounds (in AudioContext seconds)
+  // Timestamps for tracking completion based on performance.now() in milliseconds
   private nextTickAllowTime: number = 0;
   private nextHourTickAllowTime: number = 0;
 
-  // Duration of sounds in seconds (must match the sum of attack + decay + threshold)
-  private readonly TICK_DURATION = 0.05;       // the tick itself is about 16 ms. But to make it sound distinct, I set it to 50 ms (15 + 1 + 34)
-  private readonly HOUR_TICK_DURATION = 0.072;  // the hour tick is approximately 38 ms, but to make it sound distinct, I set it to 72 ms (38 + 1 + 34)
+  // Duration of sounds converted to milliseconds for unified performance.now() tracking
+  private readonly TICK_DURATION_MS = 50;
+  private readonly HOUR_TICK_DURATION_MS = 72;
 
   private init() {
     if (!this.context) {
@@ -114,17 +114,18 @@ class ClockAudioEngine {
 
   // 1. Thin acoustic "tick" (Minutes) with protection against layering
   public playTick() {
-    // Ensure context is ready if audio is active, but proceed for haptics regardless
     if (!this.isMuted) { this.init(); }
 
-    // Use a fallback clock source if AudioContext is unavailable/muted to maintain haptic timing consistency
-    const now = this.context && !this.isMuted ? this.context.currentTime : performance.now() / 1000;
+    // Use unified monotonic clock (milliseconds) for rate-limiting to prevent timeline desync
+    const nowMs = performance.now();
 
     // IF THE PREVIOUS TICK HAS NOT YET PLAYED, WE IGNORE THE NEXT ONE
-    if (now < this.nextTickAllowTime) { return; }
+    if (nowMs < this.nextTickAllowTime) { return; }
 
     // Set the time when the next tick is allowed
-    this.nextTickAllowTime = now + this.TICK_DURATION;
+    this.nextTickAllowTime = nowMs + this.TICK_DURATION_MS;
+
+    const audioStartTime = this.context ? this.context.currentTime : 0;
 
     this.synthesize({
       type: "triangle",
@@ -135,20 +136,22 @@ class ClockAudioEngine {
       decay: 0.015,
       volume: 0.12,
       vibratePattern: 7 // Ultra-short 7ms impulse for a crisp minute tick
-    }, now);
+    }, audioStartTime);
   }
 
   // 2. Tight click of the gear (Clock) with protection against layering
   public playHourTick() {
     if (!this.isMuted) { this.init(); }
 
-    const now = this.context && !this.isMuted ? this.context.currentTime : performance.now() / 1000;
+    const nowMs = performance.now();
 
     // IF THE PREVIOUS CLOCK CLICK HAS NOT YET PLAYED, IGNORE IT
-    if (now < this.nextHourTickAllowTime) { return; }
+    if (nowMs < this.nextHourTickAllowTime) { return; }
 
     // Set the blocking time
-    this.nextHourTickAllowTime = now + this.HOUR_TICK_DURATION;
+    this.nextHourTickAllowTime = nowMs + this.HOUR_TICK_DURATION_MS;
+
+    const audioStartTime = this.context ? this.context.currentTime : 0;
 
     // Basic dense tone
     this.synthesize({
@@ -160,7 +163,7 @@ class ClockAudioEngine {
       decay: 0.025,
       volume: 0.35,
       vibratePattern: 15 // Slightly longer 15ms vibration for a weightier hour tick
-    }, now);
+    }, audioStartTime);
 
     // Soft sub-click for volume
     this.synthesize({
@@ -171,14 +174,14 @@ class ClockAudioEngine {
       attack: 0.003,
       decay: 0.035,
       volume: 0.3
-    }, now);
+    }, audioStartTime);
   }
 
   // 3. Soft final click of fixation (not limited, as it is called rarely)
   public playClick() {
     if (!this.isMuted) { this.init(); }
 
-    const now = this.context && !this.isMuted ? this.context.currentTime : performance.now() / 1000;
+    const audioStartTime = this.context ? this.context.currentTime : 0;
 
     this.synthesize({
       type: "sine",
@@ -189,7 +192,7 @@ class ClockAudioEngine {
       decay: 0.06,
       volume: 0.3,
       vibratePattern: [10, 10, 15] // Double tap pattern: 10ms vibe, 10ms pause, 15ms vibe
-    }, now);
+    }, audioStartTime);
 
     this.synthesize({
       type: "triangle",
@@ -199,7 +202,7 @@ class ClockAudioEngine {
       attack: 0.001,
       decay: 0.02,
       volume: 0.15
-    }, now);
+    }, audioStartTime);
   }
 }
 
