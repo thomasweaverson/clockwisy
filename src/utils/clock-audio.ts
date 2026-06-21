@@ -9,11 +9,13 @@ export type SynthParams = {
   decay?: number;
   volume?: number;
   detune?: number;
+  vibratePattern?: number | number[]; // Vibration pattern tied to the specific synth layer
 };
 
 class ClockAudioEngine {
   private context: AudioContext | null = null;
   private isMuted: boolean = true;
+  private isVibrationEnabled: boolean = true;
 
   // Timestamps for tracking completion of sounds (in AudioContext seconds)
   private nextTickAllowTime: number = 0;
@@ -22,6 +24,7 @@ class ClockAudioEngine {
   // Duration of sounds in seconds (must match the sum of attack + decay + threshold)
   private readonly TICK_DURATION = 0.05;       // the tick itself is about 16 ms. But to make it sound distinct, I set it to 50 ms (15 + 1 + 34)
   private readonly HOUR_TICK_DURATION = 0.072;  // the hour tick is approximately 38 ms, but to make it sound distinct, I set it to 72 ms (38 + 1 + 34)
+
   private init() {
     if (!this.context) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,11 +44,38 @@ class ClockAudioEngine {
     return this.isMuted;
   }
 
-  // LOW-LEVEL SYNTHESIZER
-  private synthesize(params: SynthParams, startTime: number) {
-    try {
-      if (!this.context) { return; }
+  public setVibration(enabled: boolean) {
+    this.isVibrationEnabled = enabled;
+  }
 
+  public getVibration(): boolean {
+    return this.isVibrationEnabled && typeof navigator !== "undefined" && !!navigator.vibrate;
+  }
+
+  private triggerVibration(pattern?: number | number[]) {
+    if (!pattern || !this.isVibrationEnabled) { return; }
+
+    try {
+      // Safe check for SSR environments and browser support (silently skips iOS Safari)
+      if (typeof navigator !== "undefined" && navigator.vibrate) {
+        navigator.vibrate(pattern);
+      }
+    } catch (e) {
+      console.warn("Vibration failed:", e);
+    }
+  }
+
+  // LOW-LEVEL SYNTHESIZER WITH INDEPENDENT HAPTIC CONTROL
+  private synthesize(params: SynthParams, startTime: number) {
+    // Trigger haptic feedback independently of the audio mute state
+    if (params.vibratePattern) {
+      this.triggerVibration(params.vibratePattern);
+    }
+
+    // Skip audio synthesis if the engine is muted or context is not available
+    if (this.isMuted || !this.context) { return; }
+
+    try {
       const osc = this.context.createOscillator();
       const gainNode = this.context.createGain();
 
@@ -84,11 +114,11 @@ class ClockAudioEngine {
 
   // 1. Thin acoustic "tick" (Minutes) with protection against layering
   public playTick() {
-    if (this.isMuted) { return; }
-    this.init();
-    if (!this.context) { return; }
+    // Ensure context is ready if audio is active, but proceed for haptics regardless
+    if (!this.isMuted) { this.init(); }
 
-    const now = this.context.currentTime;
+    // Use a fallback clock source if AudioContext is unavailable/muted to maintain haptic timing consistency
+    const now = this.context && !this.isMuted ? this.context.currentTime : performance.now() / 1000;
 
     // IF THE PREVIOUS TICK HAS NOT YET PLAYED, WE IGNORE THE NEXT ONE
     if (now < this.nextTickAllowTime) { return; }
@@ -103,17 +133,16 @@ class ClockAudioEngine {
       pitchDropDuration: 0.008,
       attack: 0.001,
       decay: 0.015,
-      volume: 0.12
+      volume: 0.12,
+      vibratePattern: 7 // Ultra-short 7ms impulse for a crisp minute tick
     }, now);
   }
 
   // 2. Tight click of the gear (Clock) with protection against layering
   public playHourTick() {
-    if (this.isMuted) { return; }
-    this.init();
-    if (!this.context) { return; }
+    if (!this.isMuted) { this.init(); }
 
-    const now = this.context.currentTime;
+    const now = this.context && !this.isMuted ? this.context.currentTime : performance.now() / 1000;
 
     // IF THE PREVIOUS CLOCK CLICK HAS NOT YET PLAYED, IGNORE IT
     if (now < this.nextHourTickAllowTime) { return; }
@@ -129,7 +158,8 @@ class ClockAudioEngine {
       pitchDropDuration: 0.012,
       attack: 0.002,
       decay: 0.025,
-      volume: 0.35
+      volume: 0.35,
+      vibratePattern: 15 // Slightly longer 15ms vibration for a weightier hour tick
     }, now);
 
     // Soft sub-click for volume
@@ -146,11 +176,9 @@ class ClockAudioEngine {
 
   // 3. Soft final click of fixation (not limited, as it is called rarely)
   public playClick() {
-    if (this.isMuted) { return; }
-    this.init();
-    if (!this.context) { return; }
+    if (!this.isMuted) { this.init(); }
 
-    const now = this.context.currentTime;
+    const now = this.context && !this.isMuted ? this.context.currentTime : performance.now() / 1000;
 
     this.synthesize({
       type: "sine",
@@ -159,7 +187,8 @@ class ClockAudioEngine {
       pitchDropDuration: 0.04,
       attack: 0.002,
       decay: 0.06,
-      volume: 0.3
+      volume: 0.3,
+      vibratePattern: [10, 10, 15] // Double tap pattern: 10ms vibe, 10ms pause, 15ms vibe
     }, now);
 
     this.synthesize({
