@@ -1,14 +1,19 @@
+import { BREAK_POINT } from "../constants/common";
+import { useWindowWidth } from "../hooks/use-window-size";
 import { useTheme } from "../theme/use-theme";
 
 export default function AppHeader() {
   const { themeClasses } = useTheme();
   const { headerGradient, textNeutral } = themeClasses;
+  const viewportWidth = useWindowWidth();
+  const textSizeHeadingClassNames = viewportWidth > BREAK_POINT ? "text-4xl/14" : "text-3xl/10";
+  const textSizeParagraphClassNames = viewportWidth > BREAK_POINT ? "text-base" : "text-xs";
 
   return (
     <header className="mb-auto relative flex w-full flex-col items-center gap-1 text-center select-none">
       <h1
         className={`
-          text-3xl font-black tracking-wider transition-colors duration-700
+          ${textSizeHeadingClassNames} font-black tracking-wider transition-colors duration-700
           ${headerGradient}
         `}
       >
@@ -17,7 +22,7 @@ export default function AppHeader() {
 
       <p
         className={`
-          text-xs font-medium tracking-wide transition-colors duration-700
+          ${textSizeParagraphClassNames} font-medium tracking-wide transition-colors duration-700
           ${textNeutral}
         `}
       >

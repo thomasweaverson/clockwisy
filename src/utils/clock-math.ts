@@ -78,14 +78,21 @@ export const degreesToHours = (degrees: Degrees): Hours => {
 // Adjusts the 12-hour format from coordinates back to 24-hour format,
 // based on what time of day (day or evening) was in the state before this.
 
-export const calculate24Hour = (new12Hour: Hours, current24Hour: Hours): Hours => {
+export const calculate24Hour = (
+  new12Hour: Hours,
+  current24Hour: Hours,
+): Hours => {
   const isPm = current24Hour >= HOURS_ON_DIAL;
 
   if (isPm) {
-    return new12Hour === 0 ? HOURS_ON_DIAL : new12Hour + HOURS_ON_DIAL; // Evening/Night (12-23)
+    return new12Hour === 12
+      ? 12
+      : new12Hour + HOURS_ON_DIAL;
   }
 
-  return new12Hour; // Morning/Day (0-11)
+  return new12Hour === 12
+    ? 0
+    : new12Hour;
 };
 
 /**

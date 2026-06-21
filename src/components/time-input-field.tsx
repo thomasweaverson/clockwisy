@@ -1,5 +1,7 @@
 
 import React from "react";
+import { BREAK_POINT } from "../constants/common";
+import { useWindowWidth } from "../hooks/use-window-size";
 
 interface TimeInputFieldProps {
   name: string;
@@ -20,6 +22,10 @@ export default function TimeInputField({
   onKeyDown,
   onBlur,
 }: TimeInputFieldProps) {
+
+  const viewportWidth = useWindowWidth();
+  const inputWidthClassNames = viewportWidth > BREAK_POINT ? "w-32" : "w-24";
+
   return (
     <div className="flex flex-col">
       <input
@@ -33,7 +39,7 @@ export default function TimeInputField({
         onKeyDown={onKeyDown}
         onBlur={onBlur}
         className={`
-          w-20 rounded-xl p-2.5 text-center font-semibold
+          ${inputWidthClassNames} rounded-xl text-center font-semibold
           transition-all duration-300 focus-visible:outline-none focus-visible:ring-2
           ${className}
         `.trim()}

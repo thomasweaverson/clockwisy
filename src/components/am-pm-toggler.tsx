@@ -21,7 +21,7 @@ export default function AmPmToggler({
       onClick={toggleAmPm}
       aria-label={isAmPm ? "Switch to 24-hour format" : "Switch to 12-hour format"}
     >
-      <span className="text-base font-bold transition-transform duration-300 group-hover:scale-110">
+      <span className="font-bold transition-transform duration-300 group-hover:scale-110">
         {isAmPm ? "12H" : "24H"}
       </span>
     </ControlButton>

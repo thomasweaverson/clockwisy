@@ -3,6 +3,8 @@ import { useTheme } from "../theme/use-theme";
 import { clockAudio } from "../utils/clock-audio";
 import type { Hours, Minutes } from "../utils/clock-math";
 import TimeInputField from "./time-input-field";
+import { useWindowWidth } from "../hooks/use-window-size";
+import { BREAK_POINT } from "../constants/common";
 
 interface TimeInputProps {
   hours: Hours;
@@ -22,6 +24,10 @@ export default function TimeInput({
   const { isDark, themeClasses } = useTheme();
   const { containerBackground, containerBorder, inputComplexStyle, textActive, textNeutral } = themeClasses;
   const isPm = hours >= 12;
+  const viewportWidth = useWindowWidth();
+  const textSizeClassName = viewportWidth > BREAK_POINT ? "text-5xl" : "text-4xl";
+  const amPmFlagTextSizeClassName = viewportWidth > BREAK_POINT ? "text-3xl" : "text-lg";
+  const amPmFlagRightPositionClassName = viewportWidth > BREAK_POINT ? "right-8" : "right-2";
 
   const formatNumber = (num: number): string => num.toString().padStart(2, "0");
 
@@ -119,7 +125,7 @@ export default function TimeInput({
   return (
     <section
       className={`
-        flex items-center justify-center gap-3 font-mono text-4xl font-bold
+        flex items-center justify-center gap-3 font-mono ${textSizeClassName} font-bold
         w-full p-4 rounded-xl border transition-all duration-700 select-none
         ${containerBackground} ${containerBorder} relative
       `.trim()}
@@ -137,7 +143,7 @@ export default function TimeInput({
       <span
         aria-hidden="true"
         className={`
-          transition-colors duration-300 font-mono text-3xl pb-1.5
+          transition-colors duration-300 font-mono text-4xl pb-1.5
           ${isDark ? textActive : textNeutral}
           ${isWorking ? "animate-clock-blink" : ""}
         `.trim()}
@@ -156,8 +162,8 @@ export default function TimeInput({
       />
 
       {isAmPm && (
-        <span className={`absolute right-2 top-1/2 -translate-y-1/2
-          text-xxl tracking-wide select-none ${textNeutral}`}>
+        <span className={`absolute ${amPmFlagRightPositionClassName} top-1/2 -translate-y-1/2
+          ${amPmFlagTextSizeClassName} tracking-wide select-none ${textNeutral}`}>
           {isPm ? "PM" : "AM"}
         </span>
       )}

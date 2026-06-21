@@ -12,7 +12,9 @@ import ControlPanel from "./components/control-panel";
 import MobileTimePicker from "./components/mobile-time-picker/mobile-time-picker";
 import TimeInput from "./components/time-input";
 import { useIsTouchDevice } from "./hooks/use-is-touch-device";
+import { useWindowWidth } from "./hooks/use-window-size";
 import type { Theme } from "./theme/types";
+import { BREAK_POINT } from "./constants/common";
 
 export default function App() {
   const { time, isSynchronized, updateTime, toggleSynchronization } = useClockSync();
@@ -21,13 +23,15 @@ export default function App() {
 
   const [theme, setTheme] = useState<Theme>("light");
   const isTouchDevice = useIsTouchDevice();
+  const viewportWidth = useWindowWidth();
+  const maxWidthClassName = viewportWidth > BREAK_POINT ? "max-w-xl" : "max-w-sm";
 
   return (
     <ThemeProvider theme={theme}>
       <AppContainer>
         <AppHeader />
 
-        <main className="flex max-w-sm flex-col items-center gap-1">
+        <main className={`flex ${maxWidthClassName} flex-col items-center gap-1`}>
           <ControlPanel
             isSynchronized={isSynchronized}
             onToggleSynchronized={toggleSynchronization}

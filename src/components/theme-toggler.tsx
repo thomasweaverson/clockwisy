@@ -10,7 +10,7 @@ interface ThemeTogglerProps {
 export default function ThemeToggler({
   onChangeTheme,
 }: ThemeTogglerProps) {
-    const { isDark } = useTheme();
+  const { isDark } = useTheme();
 
   const toggleTheme = () => {
     clockAudio.playClick();
@@ -23,7 +23,7 @@ export default function ThemeToggler({
       onClick={toggleTheme}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
-      <span className="text-xl transition-transform duration-300 group-hover:scale-110">
+      <span className="transition-transform duration-300 group-hover:scale-110">
         {isDark ? "🌙" : "☀️"}
       </span>
     </ControlButton>

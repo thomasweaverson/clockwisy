@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { clockAudio } from "../utils/clock-audio";
 import ControlButton from "./control-button";
+import { useWindowWidth } from "../hooks/use-window-size";
+import { BREAK_POINT } from "../constants/common";
 
 export default function SoundToggler() {
+  const viewportWidth = useWindowWidth();
+  const svgSizeClassNames = viewportWidth > BREAK_POINT ? "w-8 h-8" : "w-6 h-6";
   const [isMuted, setIsMuted] = useState(() => clockAudio.getMuted());
 
   const handleToggle = () => {
@@ -29,7 +33,7 @@ export default function SoundToggler() {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
-        className="w-6 h-6 transition-transform duration-300 group-hover:scale-110"
+        className={`${svgSizeClassNames} transition-transform duration-300 group-hover:scale-110`}
       >
         {/* The body of the speaker is common to both states */}
         <path

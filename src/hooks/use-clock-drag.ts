@@ -103,6 +103,11 @@ export const useClockDrag = ({
     const clickedHour = degreesToHoveredHour(currentAngle);
 
     const target24Hour = calculate24Hour(clickedHour, hours);
+    console.log({
+      clickedHour,
+      hours,
+      target24Hour,
+    });
     const currentHourDeg = hoursToDegrees(hours, minutes, true);
     const targetHourDeg = hoursToDegrees(target24Hour, minutes, true);
 
